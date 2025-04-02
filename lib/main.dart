@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:untitled1/app_navigator.dart';
+import 'package:untitled1/nav_cubit.dart';
 import 'package:untitled1/posts_cubit.dart';
 import 'package:untitled1/posts_view.dart';
 
@@ -17,9 +19,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlocProvider<PostsBloc>(
-        create: (context) => PostsBloc(),
-        child: PostView(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => NavCubit()),
+          BlocProvider(create: (context) => PostsBloc()..add(LoadPostsEvent())),
+        ],
+        child: AppNavigator(),
       ),
     );
   }
